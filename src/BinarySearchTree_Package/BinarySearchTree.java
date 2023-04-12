@@ -34,8 +34,8 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
 
     //INORDEN: Izquierdo-Raiz-Derecho
     public LinkedList<T> inordenToString() {
-       LinkedList<T> lista=new LinkedList<>();
-       return inorden(this.root, lista);
+        LinkedList<T> lista=new LinkedList<>();
+        return inorden(this.root, lista);
     }
     private LinkedList<T> inorden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
@@ -47,32 +47,50 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
     }
 
     //PREORDEN: Raiz-Izquierdo-Derecho
-    public String preOrdenToString() {
-        String String;
-        return preOrden(this.root, String = "");
+    public LinkedList<T>  preOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return preOrden(this.root, lista);
     }
-    private String preOrden(BinaryNode<T> root, String string) {
+    private LinkedList<T>  preOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            string += root.getObjeto().toString();
-            string = preOrden(root.getLeft(), string);
-            string = preOrden(root.getRight(), string);
+            lista.add((T) root.getObjeto());
+            preOrden(root.getLeft(), lista);
+            preOrden(root.getRight(), lista);
+
         }
-        return string;
+        return lista;
     }
 
-    //POSORDEN: Izquierdo-Derecho-Raiz
-    public String posOrdenToString() {
-        String String;
-        return posOrden(this.root, String = "");
+    // ira de recha raiz izquierda
+    public LinkedList<T>  otroOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return otroOrden(this.root, lista);
     }
-    private String posOrden(BinaryNode<T> root, String string) {
+    private LinkedList<T>  otroOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            string = posOrden(root.getLeft(), string);
-            string = posOrden(root.getRight(), string);
-            string += root.getObjeto().toString();
+            preOrden(root.getRight(), lista);
+            lista.add((T) root.getObjeto());
+            preOrden(root.getLeft(), lista);
         }
-        return string;
+        return lista;
     }
+
+
+
+    //POSORDEN: Izquierdo-Derecho-Raiz
+    public LinkedList<T> posOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return otroOrden(this.root, lista);
+    }
+    private LinkedList<T> posOrden(BinaryNode<T> root, LinkedList<T> lista) {
+        if (root != null) {
+            posOrden(root.getLeft(), lista);
+            posOrden(root.getRight(), lista);
+            lista.add((T) root.getObjeto());
+        }
+        return lista;
+    }
+
 
     //Recorrido por nivel en el arbol
     public String widthOrderToString() {
@@ -270,197 +288,6 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
         }
         return nodoResultado;
         //completar
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //metodo con el comprable - revisar para implementar la clave
-    //errores cuando el objeto es enero, no funciona :(((
-    @Override
-    public boolean add(T objeto) {
-        boolean insertado=false;
-        /*
-        Tener en cuenta: Java Comparable y su implementación
-        Este método es el usado para comparar dos objetos y decidir cuando uno es mayor que otro .
-        Devuelve 1 si el objeto actual es mayor que el que pasamos como parámetro.
-        Devuelve 0 si en la comparación se produce una relación de igualdad y devuelve -1 si es menor .
-         */
-        try{
-            BinaryNode<T> temporal=new BinaryNode<>(objeto);//el temporal tendra el objeto que se ingresa
-            Comparable<T> comparableObject=(Comparable<T>)objeto; //se usa una clase que va a comparar los objetos
-            if(isEmpty()){
-                this.root=temporal;// la raiz recibira el objeto que guarda el temporal
-            }else{
-                BinaryNode<T> current=this.root; //se inicia con el actual de la raiz
-                while (!insertado){ //hasta que encuentre un espacio null
-                    if(comparableObject.compareTo((T) current.getObjeto())<0){//si es menor  a la izquierda
-                        if (current.left==null){
-                            current.left=temporal;//se el asigna al nodo derecho el objeto
-                            insertado=true;
-                            size++;//se añade uno más al size
-                        }else{
-                            current=current.left;//el actual sera el nodo izquierdo del mismo
-                        }
-                    }else{
-                        if(comparableObject.compareTo((T) current.getObjeto())>0){//si es mayor a al izquierda
-                            if (current.right==null){
-                                current.right=temporal;//se el asigna al nodo derecho el objeto
-                                insertado=true;
-                                size++;//se añade uno más al size
-                            }else{
-                                current=current.right;//el actual sera el nodo izquierdo del mismo
-                            }
-                        }else{ //cuando es cero
-                            System.out.println("El elemento ya tiene un mismo valor en el arbol");
-                            //no se agrega al arbol, no se aumenta el size
-                            insertado= false;
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            return insertado;
-        }
-    }
-    @Override
-    public T extract(Object objeto) {
-         /*
-        CASO 1: Si el nodo es una hoja, lo elimina sin más
-        CASO 2: Si el nodo tiene un hijo, devuelve el valor del hijo
-        CASO 3: Si el nodo tiene dos hijos, elegir parametro de remover(izquierda o derecha)
-         */
-        boolean eliminado=false;
-        T resultado=null;
-        try{
-            //misma dinamica que en remover, se sustituye el nodo que se quita pero se devuelve el valor del mismo
-            if(!isEmpty()){
-                if (objeto.equals(root.getObjeto())){//en caso de que el elemento a eliminar sea la raiz
-                    root=sustituir(root);//metodo auxiliar
-                    size--;//se resta un elemento
-                }
-                else{
-                    BinaryNode<T> current=root;//nodo actual
-                    BinaryNode<T> parent=root;//nodo padre
-                    if(((Comparable) objeto).compareTo(root.getObjeto())<0){// en caso de que este en el lado inquierdo, menor al nodo
-                        current=root.left;
-                    }else {//en caso de que el objeto sea mayor a la raiz, verifica el lado derecho
-                        current=root.right;
-                    }
-                    while ((current!=null)&& (eliminado==false)){//hasta que sea nulll-> llegue al final del arbol
-                        if(objeto.equals(current.getObjeto())){
-                            eliminado=true;
-                            size--;//se resta
-
-                            resultado= (T) current.getObjeto(); //en el extraer-> se extrae el objeto del actual
-
-                            if(current==parent.left){
-                                parent.left=sustituir(current);//se tiene conocimiento del padre y del hijo
-                            }else{
-                                parent.right=sustituir(current);//
-                            }
-                        }else{
-                            parent=current;//el padre sera el actual
-                            if(((Comparable) objeto).compareTo(current.getObjeto())<0){// se verifica si va hacia la izquierda o derecha
-                                current=current.left;//el actual sera el nodo izquierdo
-                            }else{//si es mayor el objeto estara en la derecha
-                                current=current.right;//el actual sera el nodo derecho
-                            }
-                        }
-                    }
-                    if(eliminado==false){
-                        Logger.getAnonymousLogger("Binary Tree");
-                        resultado=null;
-                        System.out.println("No se ha encontrado el nodo");
-                    }
-
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            return resultado;
-        }
-    }
-    @Override
-    public boolean remove(T objeto) {
-          /*
-        CASO 1: Si el nodo es una hoja, lo elimina sin más
-        CASO 2: Si el nodo tiene un hijo, devuelve el valor del hijo
-        CASO 3: Si el nodo tiene dos hijos, elegir parametro de remover(izquierda o derecha)
-         */
-        boolean eliminado=false;
-        try{
-           if(!isEmpty()){
-               if (objeto.equals(root.getObjeto())){//en caso de que el elemento a eliminar sea la raiz
-                   root=sustituir(root);//metodo auxiliar
-                   size--;//se resta un elemento
-               }
-               else{
-                   BinaryNode<T> current=root;//nodo actual
-                   BinaryNode<T> parent=root;//nodo padre
-                   if(((Comparable) objeto).compareTo(root.getObjeto())<0){// en caso de que este en el lado inquierdo, menor al nodo
-                       current=root.left;
-                   }else {//en caso de que el objeto sea mayor a la raiz, verifica el lado derecho
-                       current=root.right;
-                   }
-                   while ((current!=null)&& (eliminado==false)){//hasta que sea nulll-> llegue al final del arbol
-                       if(objeto.equals(current.getObjeto())){
-                           eliminado=true;
-                           size--;//se resta
-                           //Resultado=current.getObject; //en el extraer-> se extrae el objeto del actual
-                           if(current==parent.left){
-                               parent.left=sustituir(current);//se tiene conocimiento del padre y del hijo
-                           }else{
-                               parent.right=sustituir(current);//
-                           }
-                       }else{
-                           parent=current;//el padre sera el actual
-                           if(((Comparable) objeto).compareTo(current.getObjeto())<0){// se verifica si va hacia la izquierda o derecha
-                                current=current.left;//el actual sera el nodo izquierdo
-                           }else{//si es mayor el objeto estara en la derecha
-                               current=current.right;//el actual sera el nodo derecho
-                           }
-                       }
-                   }
-                   if(eliminado==false){
-                       Logger.getAnonymousLogger("Binary Tree");
-                   }
-
-               }
-           }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            return eliminado;
-        }
-    }
-
-
-    public LinkedList<T> ordenarLista(LinkedList<T> lista){
-        LinkedList<T> listaOrdenada=new LinkedList<>();
-        int ubicacion=1;
-        while(!lista.isEmpty()){
-            add(lista.pop(), ubicacion);
-            ubicacion++;
-        }
-        return inordenToString();
-
     }
 
 }

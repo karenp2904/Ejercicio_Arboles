@@ -6,9 +6,9 @@ public interface TreeInterface<T> {
 
     String widthOrderToString();
     LinkedList<T> inordenToString();
-    String preOrdenToString();
-    String posOrdenToString();
-    boolean add(T objeto);
+    LinkedList<T> preOrdenToString();
+    LinkedList<T> posOrdenToString();
+    boolean add(T objeto, int indice);
     T extract();
     boolean search(int indice);
     boolean remove(int indice);
@@ -16,10 +16,5 @@ public interface TreeInterface<T> {
     int size();
     int height();
 
-
-
-    boolean add(T objeto,int indice);
-    T extract(T objeto);
-    boolean remove(T objeto);
 
 }
