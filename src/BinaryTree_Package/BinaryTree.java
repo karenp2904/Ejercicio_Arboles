@@ -1,6 +1,7 @@
 package BinaryTree_Package;
 
-import Tools.DinamicQueue.Queue;
+import Estructuras.DinamicQueue.Queue;
+import Estructuras.ListasEnlaceDoble.LinkedList;
 
 public class BinaryTree<T> implements TreeInterface<T> {
     BinaryNode<T> root;
@@ -10,11 +11,11 @@ public class BinaryTree<T> implements TreeInterface<T> {
         this.root = null;
     }
 
-    public BinaryTree(BinaryNode root) {
+    public BinaryTree(BinaryNode<T> root) {
         this.root = root;
     }
 
-    public BinaryTree(Object objet) {
+    public BinaryTree(T objet) {
         root = new BinaryNode<T>(objet);
         size=1;
     }
@@ -25,8 +26,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return inorden(this.root, String = "");
     }
 
-
-    public String inorden(BinaryNode root, String string) {
+    private String inorden(BinaryNode<T> root, String string) {
         if (root != null) {
             string = inorden(root.getLeft(), string);
             string += root.getObjeto().toString();
@@ -41,7 +41,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return preOrden(this.root, String = "");
     }
 
-    public String preOrden(BinaryNode root, String string) {
+    private String preOrden(BinaryNode<T> root, String string) {
         if (root != null) {
             string += root.getObjeto().toString();
             string = preOrden(root.getLeft(), string);
@@ -52,17 +52,17 @@ public class BinaryTree<T> implements TreeInterface<T> {
 
     //POSORDEN: Izquierdo-Derecho-Raiz
     public String posOrdenToString() {
-        String String;
-        return posOrden(this.root, String = "");
+        LinkedList<T> lista= new LinkedList<>();
+        return posOrden(this.root, lista);
     }
 
-    public String posOrden(BinaryNode root, String string) {
+    private String posOrden(BinaryNode<T> root, LinkedList<T> list) {
         if (root != null) {
-            string = posOrden(root.getLeft(), string);
-            string = posOrden(root.getRight(), string);
-            string += root.getObjeto().toString();
+          posOrden(root.getLeft(), list);
+          posOrden(root.getRight(), list);
+          list.add((T) root.getObjeto());
         }
-        return string;
+        return list.toString();
     }
 
     public String widthOrderToString() {
@@ -70,7 +70,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return widthOrder(this, string);
     }
 
-    public String widthOrder(TreeInterface<T> root, String string) {
+    private String widthOrder(TreeInterface<T> root, String string) {
         Queue<TreeInterface<T>> cola = new Queue<>();
         cola.insert(this.root);
         BinaryNode<T> nodo = new BinaryNode<T>();
@@ -89,7 +89,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
 
     }
 
-    public boolean addWidth(Object objeto) {
+    public boolean addWidth(T objeto) {
         boolean insertar = false;
         try {
             //INORDEN: Izquierdo-Raiz-Derecho
@@ -122,7 +122,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
     }
 
-    public boolean addDepth(Object objeto) { //completar
+    public boolean addDepth(T objeto) { //completar
         boolean insertar = false;
         int bandera = 1;
         try {
@@ -167,25 +167,23 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
     }
 
-    public boolean remove(Object objeto){
+    public boolean remove(T objeto){
         return removeObject(this.root,objeto);
     }
-    public boolean removeObject(BinaryNode<T> raiz, Object objeto) {
+    private boolean removeObject(BinaryNode<T> raiz, Object objeto) {
         if (raiz == null) {
             return false;
         }
-
         Queue<TreeInterface<T>> cola = new Queue<>();
         cola.insert(raiz);
 
         while (!cola.isEmpty()) {
             BinaryNode<T> nodo = (BinaryNode<T>) cola.extract();
-
             if (nodo.getObjeto() == objeto) {
                 eliminarNodo(nodo);
+                size--;
                 return true;
             }
-
             if (nodo.left != null) {
                 cola.insert(nodo.left);
             }
@@ -196,7 +194,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return true;
     }
-
 
     private void eliminarNodo(BinaryNode<T> nodoAEliminar) {
         // Caso 1: el nodo a eliminar es una hoja (no tiene hijos)

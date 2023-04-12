@@ -12,12 +12,12 @@ public class BinaryNode<T> extends TreeNode<T> {
         this.left = this.right = null;
     }
 
-    public BinaryNode(Object objeto) {
+    public BinaryNode(T objeto) {
         super(objeto);
         this.left = this.right = null;
     }
 
-    public BinaryNode(Object objeto, BinaryNode left, BinaryNode righ) {
+    public BinaryNode(T objeto, BinaryNode left, BinaryNode righ) {
         super(objeto);
         this.left = left;
         this.right = right;

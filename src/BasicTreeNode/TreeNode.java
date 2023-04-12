@@ -2,19 +2,19 @@ package BasicTreeNode;
 
 public class TreeNode<T> {
 
-        Object objeto;
+        T objeto;
 
         public TreeNode() {
         }
-        public TreeNode(Object objeto) {
+        public TreeNode(T objeto) {
             this.objeto = objeto;
         }
 
-        public Object getObjeto() {
+        public T getObjeto() {
             return objeto;
         }
 
-        public void setObjeto(Object objeto) {
+        public void setObjeto(T objeto) {
             this.objeto = objeto;
         }
 

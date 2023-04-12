@@ -7,10 +7,10 @@ public interface TreeInterface<T> {
     String preOrdenToString();
     String posOrdenToString();
 
-    boolean addWidth(Object objeto);
-    boolean addDepth(Object objeto);
+    boolean addWidth(T objeto);
+    boolean addDepth(T objeto);
 
-    boolean remove(Object objeto);
+    boolean remove(T objeto);
 
     boolean isEmpty();
 
