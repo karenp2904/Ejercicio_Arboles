@@ -33,17 +33,17 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
     }
 
     //INORDEN: Izquierdo-Raiz-Derecho
-    public String inordenToString() {
-        String String;
-        return inorden(this.root, String = "");
+    public LinkedList<T> inordenToString() {
+       LinkedList<T> lista=new LinkedList<>();
+       return inorden(this.root, lista);
     }
-    private String inorden(BinaryNode<T> root, String string) {
+    private LinkedList<T> inorden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            string = inorden(root.getLeft(), string);
-            string += root.getObjeto().toString();
-            string = inorden(root.getRight(), string);
+            inorden(root.getLeft(), lista);
+            inorden(root.getRight(), lista);
+            lista.add((T) root.getObjeto());
         }
-        return string;
+        return lista;
     }
 
     //PREORDEN: Raiz-Izquierdo-Derecho
@@ -284,8 +284,6 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
 
 
 
-
-
     //metodo con el comprable - revisar para implementar la clave
     //errores cuando el objeto es enero, no funciona :(((
     @Override
@@ -451,6 +449,18 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
         finally {
             return eliminado;
         }
+    }
+
+
+    public LinkedList<T> ordenarLista(LinkedList<T> lista){
+        LinkedList<T> listaOrdenada=new LinkedList<>();
+        int ubicacion=1;
+        while(!lista.isEmpty()){
+            add(lista.pop(), ubicacion);
+            ubicacion++;
+        }
+        return inordenToString();
+
     }
 
 }

@@ -1,9 +1,11 @@
 package BinarySearchTree_Package;
 
+import Estructuras.ListasEnlaceDoble.LinkedList;
+
 public interface TreeInterface<T> {
 
     String widthOrderToString();
-    String inordenToString();
+    LinkedList<T> inordenToString();
     String preOrdenToString();
     String posOrdenToString();
     boolean add(T objeto);

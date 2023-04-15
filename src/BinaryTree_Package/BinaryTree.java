@@ -257,6 +257,17 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
 
 
+
+    public LinkedList<T> ordenarLista(LinkedList<T> lista){
+        LinkedList<T> listaOrdenada=new LinkedList<>();
+        while(!lista.isEmpty()){
+            addWidth(lista.pop());
+        }
+
+        return null;
+    }
+
+
 }
 
 

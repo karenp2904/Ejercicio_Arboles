@@ -29,7 +29,7 @@ public class Main {
 
 
 
-        System.out.println(arbol.widthOrderToString());
+        System.out.println(arbol.posOrdenToString());
         //arbol.addWidth("holaaa");
 
         //System.out.println(arbol.root.left.getObjeto());
