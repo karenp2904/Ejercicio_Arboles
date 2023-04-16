@@ -139,25 +139,8 @@ public class BinaryTree<T> implements TreeInterface<T> {
             if (isEmpty()) {
                this.root=new BinaryNode<>(objeto);
             } else {
-               Queue<T> cola=new Queue<>();
-                cola.insert(this.root);
 
-                while (!cola.isEmpty()) {
-                    BinaryNode<T> nodoActual = (BinaryNode<T>) cola.extract();
-                    if (nodoActual == null) {
-                        continue;
-                    }
-                    BinaryNode<T>  nuevoNodoIzquierdo = new BinaryNode<T> (objeto);
-                    nodoActual.left = nuevoNodoIzquierdo;
-                    cola.insert(nuevoNodoIzquierdo);
 
-                    if (!cola.isEmpty()) {
-                        BinaryNode<T>  nuevoNodoDerecho = new BinaryNode<T> ((T) ((BinaryNode<?>) cola.extract()).getObjeto());
-                        nodoActual.right = nuevoNodoDerecho;
-                        cola.insert(nuevoNodoDerecho);
-                        insertar=true;
-                    }
-                }
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -223,7 +206,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
 
     @Override
     public boolean removePosOrden() {
-        return false;
+        return removeRecursive(this.root);
     }
     private boolean removeRecursive(BinaryNode<T> raiz){
         if(!isEmpty()){
@@ -244,14 +227,15 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
 
     @Override
-    public T find(T elemento) {
-        BinaryNode<T> current=findRecursive(elemento,this.root);
+    public boolean search(T objeto) {
+        BinaryNode<T> current=findRecursive(objeto,this.root);
         if(current!=null){
-            return  (T) current.getObjeto();
+            return  true;
         }else{
-            return null;
+            return false;
         }
     }
+
     public BinaryNode<T> findRecursive(T elemento, BinaryNode<T> next){
         if(next==null){
             return null;
@@ -266,17 +250,31 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return temporal;
     }
 
+    @Override
+    public boolean searchPreOrden(T objeto) {
+        return searchPreRecursive(this.root);
+    }
+    private boolean searchPreRecursive(BinaryNode<T> raiz){
+        boolean encontrado=false;
+        if(!isEmpty()){
+            //preOrden: raiz- izq- der
+            encontrado=search(raiz.getObjeto());//re utiliza el metodo search generado anteriormente
+            searchPreRecursive(raiz.left);
+            searchPreRecursive(raiz.right);
+        }
+        return encontrado;
+    }
     //metodo para verificar si el arbol esta lleno
     @Override
     public boolean isComplete() {
-        return isCompleteRecursive((TreeInterface<T>) this.root);
+        return isCompleteRecursive(this.root);
     }
-    private boolean isCompleteRecursive(TreeInterface<T> raiz) {
+    private boolean isCompleteRecursive(BinaryNode<T> raiz) {
         if (isEmpty()) {
             return true;
         }else{
             Queue<TreeInterface<T>> queue = new Queue<>();
-            queue.insert(this.root);
+            queue.insert(root);
             boolean end = false;
             while (!queue.isEmpty()) {
                 BinaryNode<T> current = (BinaryNode<T>) queue.extract();

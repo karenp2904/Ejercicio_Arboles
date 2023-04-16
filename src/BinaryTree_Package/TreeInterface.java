@@ -20,7 +20,9 @@ public interface TreeInterface<T> {
 
     int size();
 
-    T find(T elemento);
+    boolean search(T objeto);
+
+    boolean searchPreOrden(T objeto);
 
     boolean isComplete();
     boolean isFull();
