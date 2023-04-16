@@ -21,48 +21,60 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
 
     //INORDEN: Izquierdo-Raiz-Derecho
-    public String inordenToString() {
-        String String;
-        return inorden(this.root, String = "");
+    public LinkedList<T> inordenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return inorden(this.root, lista);
     }
-
-    private String inorden(BinaryNode<T> root, String string) {
+    private LinkedList<T> inorden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            string = inorden(root.getLeft(), string);
-            string += root.getObjeto().toString();
-            string = inorden(root.getRight(), string);
+            inorden(root.getLeft(), lista);
+            lista.add((T) root.getObjeto());
+            inorden(root.getRight(), lista);
         }
-        return string;
+        return lista;
     }
 
     //PREORDEN: Raiz-Izquierdo-Derecho
-    public String preOrdenToString() {
-        String String;
-        return preOrden(this.root, String = "");
+    public LinkedList<T>  preOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return preOrden(this.root, lista);
+    }
+    private LinkedList<T>  preOrden(BinaryNode<T> root, LinkedList<T> lista) {
+        if (root != null) {
+            lista.add((T) root.getObjeto());
+            preOrden(root.getLeft(), lista);
+            preOrden(root.getRight(), lista);
+
+        }
+        return lista;
     }
 
-    private String preOrden(BinaryNode<T> root, String string) {
+    // ira derecha raiz izquierda
+    public LinkedList<T>  otroOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return otroOrden(this.root, lista);
+    }
+    private LinkedList<T>  otroOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            string += root.getObjeto().toString();
-            string = preOrden(root.getLeft(), string);
-            string = preOrden(root.getRight(), string);
+            otroOrden(root.getRight(), lista);
+            lista.add((T) root.getObjeto());
+            otroOrden(root.getLeft(), lista);
         }
-        return string;
+        return lista;
     }
 
     //POSORDEN: Izquierdo-Derecho-Raiz
-    public String posOrdenToString() {
-        LinkedList<T> lista= new LinkedList<>();
+    public LinkedList<T> posOrdenToString() {
+        LinkedList<T> lista=new LinkedList<>();
         return posOrden(this.root, lista);
     }
-
-    private String posOrden(BinaryNode<T> root, LinkedList<T> list) {
+    private LinkedList<T> posOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-          posOrden(root.getLeft(), list);
-          posOrden(root.getRight(), list);
-          list.add((T) root.getObjeto());
+            posOrden(root.getLeft(), lista);
+            posOrden(root.getRight(), lista);
+            lista.add((T) root.getObjeto());
         }
-        return list.toString();
+        return lista;
     }
 
     public String widthOrderToString() {
@@ -170,7 +182,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public boolean remove(T objeto){
         return removeObject(this.root,objeto);
     }
-    private boolean removeObject(BinaryNode<T> raiz, Object objeto) {
+    private boolean removeObject(BinaryNode<T> raiz, T objeto) {
         if (raiz == null) {
             return false;
         }
@@ -256,15 +268,66 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return temporal;
     }
 
-
-
-    public LinkedList<T> ordenarLista(LinkedList<T> lista){
-        LinkedList<T> listaOrdenada=new LinkedList<>();
-        while(!lista.isEmpty()){
-            addWidth(lista.pop());
+    //metodo para verificar si el arbol esta lleno
+    @Override
+    public boolean isComplete() {
+        return isCompleteRecursive((TreeInterface<T>) this.root);
+    }
+    private boolean isCompleteRecursive(TreeInterface<T> raiz) {
+        if (isEmpty()) {
+            return true;
+        }else{
+            Queue<TreeInterface<T>> queue = new Queue<>();
+            queue.insert(this.root);
+            boolean end = false;
+            while (!queue.isEmpty()) {
+                BinaryNode<T> current = (BinaryNode<T>) queue.extract();
+                if (current.left == null) {
+                    end = true;
+                } else if (end) {
+                    return false;
+                } else {
+                    queue.insert(current.left);
+                }
+                if (current.right == null) {
+                    end = true;
+                } else if (end) {
+                    return false;
+                } else {
+                    queue.insert(current.right);
+                }
+            }
+            return true;
         }
 
-        return null;
+    }
+
+    //metodo para saber si el arbol esta lleno
+    @Override
+    public boolean isFull() {
+        if(isEmpty()){//se verifica si esta vacio
+            return true;
+        }else{
+            return isFullRecursive(this.root);//metodo recursivo para recorrer el arbol y verificar sus nodos
+        }
+    }
+    private boolean isFullRecursive(BinaryNode<T> nodo) {
+        /*
+        Verifica que:
+        Si el nodo es nulo, entonces el árbol es completo.
+        Si el nodo no tiene hijos, entonces el árbol es completo.
+        Si el nodo tiene dos hijos, entonces el método se llama recursivamente en los hijos izquierdo y derecho del nodo.
+         */
+        if (nodo == null) {
+            return true;
+        }
+        if (nodo.left == null && nodo.right == null) {
+            return true;
+        }
+        if (nodo.left != null && nodo.right != null) {
+            return isFullRecursive(nodo.left) && isFullRecursive(nodo.right);
+        }
+        return false;
     }
 
 

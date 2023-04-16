@@ -1,11 +1,13 @@
 package BinaryTree_Package;
 
+import Estructuras.ListasEnlaceDoble.LinkedList;
+
 public interface TreeInterface<T> {
 
     String widthOrderToString();
-    String inordenToString();
-    String preOrdenToString();
-    String posOrdenToString();
+    LinkedList<T> inordenToString();
+    LinkedList<T> preOrdenToString();
+    LinkedList<T> posOrdenToString();
 
     boolean addWidth(T objeto);
     boolean addDepth(T objeto);
@@ -17,6 +19,9 @@ public interface TreeInterface<T> {
     int size();
 
     T find(T elemento);
+
+    boolean isComplete();
+    boolean isFull();
 
 
 

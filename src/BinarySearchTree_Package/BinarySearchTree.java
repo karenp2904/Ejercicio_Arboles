@@ -32,6 +32,69 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
         return counterHeight;
     }
 
+    @Override
+    public boolean isComplete() {
+        return isCompleteRecursive((TreeInterface<T>) this.root);
+    }
+
+    private boolean isCompleteRecursive(TreeInterface<T> raiz) {
+        if (isEmpty()) {
+            return true;
+        }else{
+            Queue<TreeInterface<T>> queue = new Queue<>();
+            queue.insert(this.root);
+            boolean end = false;
+            while (!queue.isEmpty()) {
+                BinaryNode<T> current = (BinaryNode<T>) queue.extract();
+                if (current.left == null) {
+                    end = true;
+                } else if (end) {
+                    return false;
+                } else {
+                    queue.insert(current.left);
+                }
+                if (current.right == null) {
+                    end = true;
+                } else if (end) {
+                    return false;
+                } else {
+                    queue.insert(current.right);
+                }
+            }
+            return true;
+        }
+
+    }
+
+    //metodo para saber si el arbol esta lleno
+    @Override
+    public boolean isFull() {
+        if(isEmpty()){//se verifica si esta vacio
+            return true;
+        }else{
+            return isFullRecursive(this.root);//metodo recursivo para recorrer el arbol y verificar sus nodos
+        }
+    }
+
+    private boolean isFullRecursive(BinaryNode<T> nodo) {
+        /*
+        Verifica que:
+        Si el nodo es nulo, entonces el árbol es completo.
+        Si el nodo no tiene hijos, entonces el árbol es completo.
+        Si el nodo tiene dos hijos, entonces el método se llama recursivamente en los hijos izquierdo y derecho del nodo.
+         */
+        if (nodo == null) {
+            return true;
+        }
+        if (nodo.left == null && nodo.right == null) {
+            return true;
+        }
+        if (nodo.left != null && nodo.right != null) {
+            return isFullRecursive(nodo.left) && isFullRecursive(nodo.right);
+        }
+        return false;
+    }
+
     //INORDEN: Izquierdo-Raiz-Derecho
     public LinkedList<T> inordenToString() {
         LinkedList<T> lista=new LinkedList<>();
@@ -40,8 +103,9 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
     private LinkedList<T> inorden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
             inorden(root.getLeft(), lista);
-            inorden(root.getRight(), lista);
             lista.add((T) root.getObjeto());
+            inorden(root.getRight(), lista);
+
         }
         return lista;
     }
@@ -61,26 +125,24 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
         return lista;
     }
 
-    // ira de recha raiz izquierda
+    // ira derecha raiz izquierda
     public LinkedList<T>  otroOrdenToString() {
         LinkedList<T> lista=new LinkedList<>();
         return otroOrden(this.root, lista);
     }
     private LinkedList<T>  otroOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
-            preOrden(root.getRight(), lista);
+            otroOrden(root.getRight(), lista);
             lista.add((T) root.getObjeto());
-            preOrden(root.getLeft(), lista);
+            otroOrden(root.getLeft(), lista);
         }
         return lista;
     }
 
-
-
     //POSORDEN: Izquierdo-Derecho-Raiz
     public LinkedList<T> posOrdenToString() {
         LinkedList<T> lista=new LinkedList<>();
-        return otroOrden(this.root, lista);
+        return posOrden(this.root, lista);
     }
     private LinkedList<T> posOrden(BinaryNode<T> root, LinkedList<T> lista) {
         if (root != null) {
