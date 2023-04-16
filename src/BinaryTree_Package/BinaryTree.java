@@ -9,12 +9,12 @@ public class BinaryTree<T> implements TreeInterface<T> {
 
     public BinaryTree() {
         this.root = null;
+        size=0;
     }
-
     public BinaryTree(BinaryNode<T> root) {
         this.root = root;
+        size=1;
     }
-
     public BinaryTree(T objet) {
         root = new BinaryNode<T>(objet);
         size=1;
@@ -81,7 +81,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         String string = "";
         return widthOrder(this, string);
     }
-
     private String widthOrder(TreeInterface<T> root, String string) {
         Queue<TreeInterface<T>> cola = new Queue<>();
         cola.insert(this.root);
@@ -134,44 +133,33 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
     }
 
-    public boolean addDepth(T objeto) { //completar
+    public boolean addDepth(T objeto) { // - la idea es insertar segun la estructura del recorrido por orden
         boolean insertar = false;
-        int bandera = 1;
         try {
-            //PREORDEN: Raiz-Izquierdo-Derecho
-            Queue<TreeInterface<T>> cola = new Queue<>();
-            cola.insert(root);
-            BinaryNode<T> nodo = new BinaryNode<>();
-            while (!cola.isEmpty()) {
-                nodo = (BinaryNode<T>) cola.extract();// siempre se extraerá algo hasta que sea null, entonces lo que se extrae es lo que se verifica
-                if (nodo.getLeft() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
-                    cola.insert(nodo.getLeft());// se añade a la cola el nodo derecho
-                    bandera++;//se encuentra en unn nivelo superior
-                }
-                else if (nodo.getRight() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
-                    cola.insert(nodo.getRight());// se añade a la cola el nodo derecho
-                    bandera++;//se encuentra en unn nivelo superior
-                }
-                else {
-                    if(Math.pow(2,(bandera+1)-1)!=size) {
-                        if (nodo.getLeft() == null) {
-                            nodo.left = new BinaryNode<>(objeto);
-                            cola.clear();
-                            insertar = true;
-                            size++;
-                        } else {
-                            if (nodo.getRight() == null) {
-                                nodo.right = new BinaryNode<>(objeto);
-                                cola.clear();
-                                insertar = true;
-                                size++;
-                            }
-                        }
+            //POSORDEN: Izquierdo-Derecho-Raiz
+            if (isEmpty()) {
+               this.root=new BinaryNode<>(objeto);
+            } else {
+               Queue<T> cola=new Queue<>();
+                cola.insert(this.root);
+
+                while (!cola.isEmpty()) {
+                    BinaryNode<T> nodoActual = (BinaryNode<T>) cola.extract();
+                    if (nodoActual == null) {
+                        continue;
+                    }
+                    BinaryNode<T>  nuevoNodoIzquierdo = new BinaryNode<T> (objeto);
+                    nodoActual.left = nuevoNodoIzquierdo;
+                    cola.insert(nuevoNodoIzquierdo);
+
+                    if (!cola.isEmpty()) {
+                        BinaryNode<T>  nuevoNodoDerecho = new BinaryNode<T> ((T) ((BinaryNode<?>) cola.extract()).getObjeto());
+                        nodoActual.right = nuevoNodoDerecho;
+                        cola.insert(nuevoNodoDerecho);
+                        insertar=true;
                     }
                 }
-                bandera++;
             }
-            return insertar;
         }catch(Exception e){
             e.printStackTrace();
         }finally{
@@ -182,6 +170,8 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public boolean remove(T objeto){
         return removeObject(this.root,objeto);
     }
+
+    //en el removeObject se busca al nodo que contiene el objeto
     private boolean removeObject(BinaryNode<T> raiz, T objeto) {
         if (raiz == null) {
             return false;
@@ -206,7 +196,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return true;
     }
-
     private void eliminarNodo(BinaryNode<T> nodoAEliminar) {
         // Caso 1: el nodo a eliminar es una hoja (no tiene hijos)
         if (nodoAEliminar.left == null && nodoAEliminar.right == null) {
@@ -226,7 +215,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
             eliminarNodo(sucesor);
         }
     }
-
     private BinaryNode<T> encontrarSucesor(BinaryNode<T> nodo) {
         while (nodo.left != null) { // preferencia por la izquierda si tiene dos hijos
             nodo = nodo.left;
@@ -235,10 +223,22 @@ public class BinaryTree<T> implements TreeInterface<T> {
     }
 
     @Override
+    public boolean removePosOrden() {
+        return false;
+    }
+    private boolean removeRecursive(BinaryNode<T> raiz){
+        if(!isEmpty()){
+            removeRecursive(raiz.left);
+            removeRecursive(raiz.right);
+            remove(raiz.getObjeto());//re utiliza el metodo remove generado anteriormente
+        }
+        return true;
+    }
+
+    @Override
     public boolean isEmpty() {
         return root==null;
     }
-
     @Override
     public int size() {
         return size;
@@ -253,7 +253,6 @@ public class BinaryTree<T> implements TreeInterface<T> {
             return null;
         }
     }
-
     public BinaryNode<T> findRecursive(T elemento, BinaryNode<T> next){
         if(next==null){
             return null;
@@ -329,54 +328,4 @@ public class BinaryTree<T> implements TreeInterface<T> {
         }
         return false;
     }
-
-
 }
-
-
-
-
-
-        /*
-        boolean insertar = false;
-        int bandera = 1;
-        try {
-            //PREORDEN: Raiz-Izquierdo-Derecho
-            Queue<TreeInterface<T>> cola = new Queue<>();
-            cola.insert(root);
-            BinaryNode<T> nodo = new BinaryNode<>();
-            while (!cola.isEmpty()) {
-                nodo = (BinaryNode<T>) cola.extract();// siempre se extraerá algo hasta que sea null, entonces lo que se extrae es lo que se verifica
-                if (nodo.getLeft() != null && nodo.getRight() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
-                    cola.insert(nodo.getLeft());// se añade a la cola el nodo derecho
-                    cola.insert(nodo.getRight());
-                    bandera++;//se encuentra en unn nivelo superior
-                } else {
-                    if(Math.pow(2,bandera)==size) {
-                        if (nodo.getLeft() == null) {
-                            nodo.left = new BinaryNode<>(objeto);
-                            cola.clear();
-                            insertar = true;
-                            size++;
-                        } else {
-                            if (nodo.getRight() == null) {
-                                nodo.right = new BinaryNode<>(objeto);
-                                cola.clear();
-                                insertar = true;
-                                size++;
-                            }
-                        }
-                    }
-                }
-                return insertar;
-            }
-        }catch(Exception e){
-                e.printStackTrace();
-            }finally{
-                return insertar; //retornar el valor booleano que indica si hubo una insercion o no
-            }
-        }
-
-         */
-
-

@@ -14,6 +14,8 @@ public interface TreeInterface<T> {
 
     boolean remove(T objeto);
 
+    boolean removePosOrden();
+
     boolean isEmpty();
 
     int size();
