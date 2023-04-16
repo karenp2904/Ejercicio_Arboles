@@ -77,18 +77,17 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return lista;
     }
 
-    public String widthOrderToString() {
-        String string = "";
-        return widthOrder(this, string);
+    public LinkedList<T> widthOrderToString() {
+        LinkedList<T> lista=new LinkedList<>();
+        return widthOrder(this, lista);
     }
-    private String widthOrder(TreeInterface<T> root, String string) {
+    private LinkedList<T> widthOrder(TreeInterface<T> root,  LinkedList<T> lista) {
         Queue<TreeInterface<T>> cola = new Queue<>();
         cola.insert(this.root);
         BinaryNode<T> nodo = new BinaryNode<T>();
         while (!cola.isEmpty()) {
             nodo = (BinaryNode<T>) cola.extract();// siempre se extraerá algo hasta que sea null, entonces lo que se extrae es lo que se verifica
-            string+="";
-            string += nodo.getObjeto().toString();//se añade a la cadena
+            lista.add(nodo.getObjeto());//se añade a la lista
             if (nodo.getLeft() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
                 cola.insert(nodo.getLeft());// se añade a la cola el nodo derecho
             }
@@ -96,7 +95,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
                 cola.insert(nodo.getRight());
             }
         }
-        return string;
+        return lista;
 
     }
 
