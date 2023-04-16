@@ -24,7 +24,7 @@ public class Main {
        System.out.println(arbol.isComplete());
        System.out.println(arbol.isFull());
        System.out.println(arbol.preOrdenToString());
-        System.out.println(arbol.find("yupi"));
+        System.out.println(arbol.search("yupi"));
 
 
 
