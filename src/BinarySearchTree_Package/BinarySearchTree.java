@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 public class BinarySearchTree<T> implements TreeInterface<T>{
     BinaryNode<T> root;//raiz en el arbol
     int size=0; //es el encargado de dar la cantidad de nodos en el arbol
-    int counterHeight=0;
 
     public BinarySearchTree(){
         this.root=null;
@@ -29,7 +28,31 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
     }
     @Override
     public int height() {
-        return counterHeight;
+
+        return subHeight(this.root);
+    }
+    static int  counterRight=0, counterLeft=0;
+    private int subHeight(BinaryNode<T> nodo){
+        if(nodo==this.root){//se inicializan los contadores
+            counterRight=0;
+            counterLeft=0;
+        }
+        // se inicia la recursividad para comparar los subarboles de ambos lados
+        if(nodo.left!=null){
+            subHeight(nodo.left);
+            counterLeft++;
+        }
+        if(nodo.right!=null){
+            subHeight(nodo.right);
+            counterRight++;
+        }
+
+        //se comparan los contadores y elige el mayor
+        if(counterRight>counterLeft){
+            return counterRight;
+        }else{
+            return counterLeft;
+        }
     }
 
     @Override
@@ -165,25 +188,13 @@ public class BinarySearchTree<T> implements TreeInterface<T>{
         BinaryNode<T> nodo = new BinaryNode<T>();
         while (!cola.isEmpty()) {
             nodo = (BinaryNode<T>) cola.extract();// siempre se extraerá algo hasta que sea null, entonces lo que se extrae es lo que se verifica
-            string+="";
+            string+=" - ";
             string += nodo.getObjeto().toString();//se añade a la cadena
             if (nodo.getLeft() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
                 cola.insert(nodo.getLeft());// se añade a la cola el nodo derecho
             }
             if (nodo.getRight() != null) {//se verifica que no sea la hoja(ultimo nodo en el arbol)
                 cola.insert(nodo.getRight());
-            }
-            //para el contador de la altura
-            if((nodo.getLeft() != null&& nodo.getRight() != null)){
-                counterHeight++;
-            }else{
-                if(nodo.getLeft() != null&&nodo.getRight() == null ){
-                    counterHeight++;
-                }else {
-                    if(nodo.getRight() != null&&nodo.getLeft() == null){
-                    counterHeight++;
-                    }
-                }
             }
         }
         return string;

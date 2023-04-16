@@ -19,6 +19,7 @@ public interface TreeInterface<T> {
     boolean isEmpty();
 
     int size();
+    int height();
 
     boolean search(T objeto);
 

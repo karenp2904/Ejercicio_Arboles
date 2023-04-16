@@ -49,7 +49,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
         return lista;
     }
 
-    // ira derecha raiz izquierda
+    // ira derecha raiz izquierda - para un recorrido de mayor a menos jsksksks
     public LinkedList<T>  otroOrdenToString() {
         LinkedList<T> lista=new LinkedList<>();
         return otroOrden(this.root, lista);
@@ -135,18 +135,59 @@ public class BinaryTree<T> implements TreeInterface<T> {
     public boolean addDepth(T objeto) { // - la idea es insertar segun la estructura del recorrido por orden
         boolean insertar = false;
         try {
-            //POSORDEN: Izquierdo-Derecho-Raiz
+            BinaryNode<T> nodo = new BinaryNode<>(objeto);
+            //PREORDEN: Raiz-Izquierdo-Derecho
             if (isEmpty()) {
                this.root=new BinaryNode<>(objeto);
-            } else {
+            } else {/*
+                    Queue< BinaryNode<T>> cola = new Queue<>();
+                    cola.insert(root);
 
-
+                    while(!cola.isEmpty()){
+                        BinaryNode<T> temp = (BinaryNode<T>) cola.extract();
+                        if(temp.left == null){
+                            temp.left = nodo;
+                            break;
+                        }
+                        else if(temp.right == null){
+                            temp.right = nodo;
+                            break;
+                        }
+                        else{
+                            cola.insert(temp.left);
+                            cola.insert(temp.right);
+                        }
+                    }
+                    */
+                addDepthRecursive(objeto, root);
             }
         }catch(Exception e){
             e.printStackTrace();
         }finally{
             return insertar; //retornar el valor booleano que indica si hubo una insercion o no
         }
+    }
+    private boolean addDepthRecursive(T objeto, BinaryNode<T> nodo){ //comprobar**
+        //PREORDEN: Raiz-Izquierdo-Derecho
+        boolean añadido=false;
+        if(nodo==null){
+            nodo=new BinaryNode<>(objeto);
+            añadido=true;
+            return añadido;
+        }else{
+            if(nodo.left==null) {
+                nodo.left=new BinaryNode<>(objeto);//se le añade el objeto al izauierdo en primera instancia
+                añadido=true;
+            }else if(nodo.right==null){
+                nodo.right=new BinaryNode<>(objeto);
+                añadido=true;
+            }else if(nodo.left!=null){
+                    addDepthRecursive(objeto,nodo.left);
+                }else if(nodo.right!=null){
+                    addDepthRecursive(objeto,nodo.right);
+            }
+        }
+        return añadido;
     }
 
     public boolean remove(T objeto){
@@ -224,6 +265,33 @@ public class BinaryTree<T> implements TreeInterface<T> {
     @Override
     public int size() {
         return size;
+    }
+
+    public int height() {
+
+        return subHeight(this.root);
+    }
+    static int  counterRight=0, counterLeft=0;
+    private int subHeight(BinaryNode<T> nodo){
+        if(nodo==this.root){//se inicializan los contadores
+            counterRight=0;
+            counterLeft=0;
+        }
+        // se inicia la recursividad para comparar los subarboles de ambos lados
+        if(nodo.left!=null){
+            subHeight(nodo.left);
+            counterLeft++;
+        }
+        if(nodo.right!=null){
+            subHeight(nodo.right);
+            counterRight++;
+        }
+        //se comparan los contadores y elige el mayor
+        if(counterRight>counterLeft){ // se comparan ambos nodos
+            return counterRight;
+        }else{
+            return counterLeft;
+        }
     }
 
     @Override

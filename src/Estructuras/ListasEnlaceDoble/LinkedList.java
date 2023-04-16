@@ -787,7 +787,7 @@ public class LinkedList<T> implements List<T> {
 			if(!isEmpty()) {
 				Iterator<Node> it=this.iterator();
 				System.out.print("Tree[ " );
-				System.out.print("Root->" +head.getObject()+ " ----> ");
+				System.out.print("Root-> ");
 				LinkedListNode nodoAux= (LinkedListNode) it.next();
 				while(it.hasNext()) {//para que solo se imprima una vuelta
 					System.out.print(" "+nodoAux.getObject()+" ----> ");
@@ -827,10 +827,6 @@ public class LinkedList<T> implements List<T> {
 		return "";
 	}
 
-	public String toStringTree(){
-		printTree();
-		return "";
-	}
 
     
 }
