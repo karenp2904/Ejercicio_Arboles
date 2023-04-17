@@ -161,6 +161,7 @@ public class BinaryTree<T> implements TreeInterface<T> {
                         }
                     }
                 }
+                size++; //contador para el tamaño y la cantidad de nodos en el arbol
             }
         }catch(Exception e){
             e.printStackTrace();
