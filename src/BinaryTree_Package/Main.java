@@ -4,16 +4,6 @@ public class Main {
     public static void main(String[] args) {
         BinaryTree arbol=new BinaryTree();
 
-/*
-        arbol.addWidth("holaaa");
-        arbol.addWidth("b");
-        arbol.addWidth("c");
-        arbol.addWidth("buen");
-        arbol.addWidth("diaaa");
-        arbol.addWidth("holaaa");
-        arbol.addWidth("buuu");
-        arbol.addWidth("yupi");
-*/
 
         arbol.addDepth("Buenas");
         arbol.addDepth("Tardes");
@@ -28,14 +18,22 @@ public class Main {
         arbol.addDepth("iz");
         arbol.addDepth("dere");
         arbol.addDepth("ggg");
+/*
+        arbol.addWidth("holaaa");
+        arbol.addWidth("b");
+        arbol.addWidth("c");
+        arbol.addWidth("buen");
+        arbol.addWidth("diaaa");
+        arbol.addWidth("holaaa");
+        arbol.addWidth("buuu");
+        arbol.addWidth("yupi");
 
-        System.out.println(arbol.root.getRight().getRight().getObjeto());
-
+ */
         System.out.println("inoder: ");
         System.out.println(arbol.inordenToString());
         System.out.println("pre: ");
         System.out.println(arbol.preOrdenToString());
-        System.out.println("por: ");
+        System.out.println("pos: ");
         System.out.println(arbol.posOrdenToString());
         System.out.println("nivel: ");
         System.out.println(arbol.widthOrderToString());
@@ -45,7 +43,8 @@ public class Main {
        // System.out.println(arbol.addDepth("karen"));
        System.out.println(arbol.isComplete());
        System.out.println(arbol.isFull());
-
+        System.out.println(arbol.isEmpty());
+        System.out.println(arbol.remove("ggg"));
         System.out.println(arbol.search("yupi"));
 
 

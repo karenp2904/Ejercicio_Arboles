@@ -139,27 +139,28 @@ public class BinaryTree<T> implements TreeInterface<T> {
             //PREORDEN: Raiz-Izquierdo-Derecho
             if (isEmpty()) {
                this.root=new BinaryNode<>(objeto);
-            } else {/*
-                    Queue< BinaryNode<T>> cola = new Queue<>();
-                    cola.insert(root);
-
-                    while(!cola.isEmpty()){
-                        BinaryNode<T> temp = (BinaryNode<T>) cola.extract();
-                        if(temp.left == null){
-                            temp.left = nodo;
-                            break;
-                        }
-                        else if(temp.right == null){
-                            temp.right = nodo;
-                            break;
-                        }
-                        else{
-                            cola.insert(temp.left);
-                            cola.insert(temp.right);
+            } else {
+                if (root == null) {
+                    root = nodo;
+                } else {
+                    Queue<BinaryNode<T>> queue = new Queue();
+                    queue.insert(this.root);
+                    while (!queue.isEmpty()) {
+                        BinaryNode<T> aux = (BinaryNode<T>) queue.extract();
+                        if (aux.left == null) {
+                            aux.left = nodo;
+                            queue.clear();
+                            insertar=true;
+                        } else if (aux.right == null) {
+                            aux.right = nodo;
+                            queue.clear();
+                            insertar=true;
+                        } else {
+                            queue.insert(aux.left);
+                            queue.insert(aux.right);
                         }
                     }
-                    */
-                addDepthRecursive(objeto, root);
+                }
             }
         }catch(Exception e){
             e.printStackTrace();
